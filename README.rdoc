@@ -1,0 +1,7 @@
+= flatfiles
+
+Library containing various flat-file parsing implementations
+
+== Copyright
+
+Copyright (c) 2012 Aaron Hamid
