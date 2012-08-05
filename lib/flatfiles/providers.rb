@@ -9,7 +9,7 @@ module FlatFiles
     end
 
     def self.providers
-      @@providers.keys
+      @@providers.dup
     end
 
     def self.[](key)

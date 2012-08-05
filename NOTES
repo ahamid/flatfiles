@@ -1,0 +1,9 @@
+DSL impls cannot generate records from FactoryGirl-generated instances, as FactoryGirl does not fill the internal pascal string length fields (this differs from previous impl which relied on record to generate its own values internally)
+
+DSL impl can probably continue to be refactored to be simpler, it can be a source of confusion, especially WRT metaprogramming and class factories.
+
+File/String IO resource abstraction is obnoxious...shouldn't there be a better way to abstract this
+
+limiting doesn't yet work with record fetching (through Veritas) as this requires a sort on all Veritas relation fields
+
+sythetic :index field is added via struct impls, not as an ignored DSL attribute

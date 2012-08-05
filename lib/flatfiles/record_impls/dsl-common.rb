@@ -24,12 +24,14 @@ module FlatFiles
         def pack(generate = false)
           vals = []
           # for each property, get the value
-          # or generate one if there is a lambda/defaut value
+          # or generate one if there is a lambda/default value
           each_pair do |key, value|
             # if the value is nil and there is a lambda
             # generate it
+            next if self.class.template.ignored?(key)
+
             if generate and value.nil?
-              l = template.lambdas[key]
+              l = self.class.template.lambdas[key]
               if l
                 if l.is_a?(Proc)
                   # it's a proc. invoke it.
@@ -41,7 +43,7 @@ module FlatFiles
             end
             # in general it would be inconsistent to flatten legitimate field values
             # (e.g. in case the value was actually nil or an array), however we know
-            # that thse are never legitimate field values so it must have been
+            # that these are never legitimate field values so it must have been
             # explicitly set in order to support composite fields (or the user is crazy)
             if !value.nil?
               if value.is_a?(Array)
@@ -52,20 +54,21 @@ module FlatFiles
             end
           end
 
-          packed = vals.pack(self.class.field_spec_string)
+          packed = vals.pack(self.class.template.field_spec_string)
           raise "Packed struct size #{packed.length} does not match struct size: " + template.size.to_s if packed.length != template.size
           packed
         end
       end
 
       class Field
-        attr_accessor :type, :spec, :name, :data_lambda
+        attr_accessor :type, :spec, :name, :data_lambda, :ignored
 
-        def initialize(type, spec, name, data_lambda = nil)
+        def initialize(type, spec, name, data_lambda = nil, ignored = false)
           @type = type
           @spec = spec
           @name = name
           @data_lambda = data_lambda
+          @ignored = ignored
         end
 
         def components
@@ -179,6 +182,7 @@ module FlatFiles
               @unknown_inc = 0
               @fields = [ ]
               @fields_by_name = {}
+              @field_components_by_name = {}
               @klass = nil
 
               record_name self.name.gsub("::","_") if self.name
@@ -214,7 +218,14 @@ module FlatFiles
             @field_names ||= field_components.map { |c| c.name }
           end
 
-          protected
+          # called by struct class
+
+          def ignored?(name)
+            f = @field_components_by_name[name]
+            !f || f.ignored
+          end
+
+          #protected
 
           def field_spec_string
              # create an array.pack field specifier string from all the field specs
@@ -246,10 +257,15 @@ module FlatFiles
             add_field Field.new(Integer, spec, name || next_unknown_field_name, data_lambda)
           end
 
+          def ignore(spec, name = nil, data_lambda = nil)
+            add_field Field.new(nil, "", name || next_unknown_field_name, data_lambda, true)
+          end
+
           def add_field(field)
             raise "Duplicate field specified for record class #@name: #{field.name}" if @fields_by_name.has_key?(field.name)
             @fields << field
             @fields_by_name[field.name] = field
+            [ field.components ].flatten.inject(@field_components_by_name) { |map, component| map[component.name] = component; map }
           end
 
           def field_components
@@ -271,6 +287,7 @@ module FlatFiles
                 def self.template
                   @template
                 end
+
                 include StructMixin
 
                 def num_bytes

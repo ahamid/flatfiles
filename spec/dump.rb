@@ -74,7 +74,7 @@ case command
 
     filename = ARGV[1]
 
-    results = FlatFiles::Records.new(provider).all(filename, type)
+    results = FlatFiles::Records.new(provider).all(FlatFiles::Util::FileResource.new(filename), type)
     if options.count
       puts "Results: #{results.length}"
     else

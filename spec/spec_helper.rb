@@ -4,6 +4,9 @@ SimpleCov.start if ENV["COVERAGE"]
 require 'benchmark_helper'
 require 'factory_girl'
 require 'flatfiles'
+require 'flatfiles/util/resource'
+
+Dir[File.expand_path(File.dirname(__FILE__) + '/providers/*.rb')].each {|f| require f }
 
 FactoryGirl.find_definitions
 
@@ -19,11 +22,10 @@ def open_file(name)
   if content.nil?
     #file = File.open(name)
     #OPEN_FILES[name] = file
-    content = (OPEN_FILES[name] = File.read(name))
+    content = (OPEN_FILES[name] = File.read(name, mode: 'rb'))
   end
-  StringIO.new(content, 'r')
+  FlatFiles::Util::BytesResource.new(content)
 end
-
 
 RSpec.configure do |c|
   c.color_enabled = true

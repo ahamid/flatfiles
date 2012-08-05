@@ -1,24 +1,25 @@
 module FlatFiles
   class RecordFileEnumerator < Enumerator
     attr_reader :reading
-    def initialize(header, klass, io, index_start = 0)
+    def initialize(header, klass, resource, index_start = 0)
       @cache = []
       @reading = true
-      @io = io
       super() do |y|
-        index = index_start
-        loop do
-          offset = index - index_start
-          tuple = @cache[offset]
-          if tuple.nil?
-            if @reading
-              tuple = (@cache[offset] ||= read_tuple(index, header, klass, @io))
-            else
-              raise StopIteration
+        resource.with do |io|
+          index = index_start
+          loop do
+            offset = index - index_start
+            tuple = @cache[offset]
+            if tuple.nil?
+              if @reading
+                tuple = (@cache[offset] ||= read_tuple(index, header, klass, io))
+              else
+                raise StopIteration
+              end
             end
+            index += 1
+            y << tuple
           end
-          index += 1
-          y << tuple
         end
       end
     end

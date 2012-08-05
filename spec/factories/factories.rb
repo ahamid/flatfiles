@@ -1,11 +1,13 @@
-require_relative '../providers/bindata'
-
 FactoryGirl.define do
-  factory :company, class: Object do #:class => FlatFiles::Spec::BinData::Company
+  factory :dynamic_impl, class: Object do
+    # impl_class option must be passed in order for impl class to be dynamically selected
     ignore do
       impl_class nil
     end
+    initialize_with { impl_class.new }
+  end
 
+  factory :company, parent: :dynamic_impl do #:class => FlatFiles::Spec::BinData::Company
     active    'y'
     name      { Faker::Company.name }
     founded   { rand(Time.now.to_i) }
@@ -22,15 +24,9 @@ FactoryGirl.define do
     phone     { Faker::Base.numerify('###-###-###') }
     note      { Faker::Lorem.words(15).join(' ') }
     unknown1  'Y' * 13
-
-    initialize_with { impl_class.new }
   end
 
-  factory :employee, class: Object do |o| #:class => FlatFiles::Spec::BinData::Employee
-    ignore do
-      impl_class nil
-    end
-
+  factory :employee, parent: :dynamic_impl do |o| #:class => FlatFiles::Spec::BinData::Employee
     active       'y'
     honorific    { Faker::Name.prefix }
     firstname    { Faker::Name.first_name }
@@ -48,7 +44,5 @@ FactoryGirl.define do
     salary       { Random.rand(1000..100000) }
     companyid    0
     unknown1     'Y' * 13
-
-    initialize_with { impl_class.new }
   end
 end

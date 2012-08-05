@@ -6,7 +6,12 @@ describe FlatFiles::RecordFileEnumerator do
   let(:record_class) { double("record class") }
   let(:header) { double("header") }
   let(:io) { double("io") }
-  subject { FlatFiles::RecordFileEnumerator.new(header, record_class, io) }
+  let(:resource) {
+    res = double("resource")
+    res.stub(:with) { |&block| block.yield(io) }
+    res
+  }
+  subject { FlatFiles::RecordFileEnumerator.new(header, record_class, resource) }
 
   it "make_tuple throws NotImplemented" do
     record_class.should_receive(:read).with(io) { double("record") }

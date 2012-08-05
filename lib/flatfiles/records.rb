@@ -18,22 +18,21 @@ module FlatFiles
       records
     end
 
-    def get(filename, type, index)
-      record_file(filename, type).record_at(index)
+    def get(resource, type, index)
+      record_file(resource, type).record_at(index)
     end
 
-    def all(filename, type)
-      record_file(filename, type).records_array
+    def all(resource, type)
+      record_file(resource, type).records_array
     end
 
     def record_class(record_type)
       @provider[record_type.to_sym]
     end
 
-    protected
-
-    def record_file(filename, type)
-      RecordFile.new(filename, record_class(type))
+    def record_file(resource, type)
+      RecordFile.new(resource, record_class(type))
     end
+
   end
 end
