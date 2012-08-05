@@ -1,4 +1,5 @@
 require_relative 'dsl-common'
+require 'ostruct'
 
 module FlatFiles
   module RecordImpls

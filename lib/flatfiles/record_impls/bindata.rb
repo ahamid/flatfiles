@@ -43,6 +43,9 @@ module FlatFiles
           end
         end
 
+        alias :parse :read
+        alias :pack :to_binary_s
+
         def self.relation(io)
           BinDataRelation.new(self, io)
         end
@@ -51,8 +54,8 @@ module FlatFiles
       # Veritas support
       class BinDataEnumerator < RecordFileEnumerator
         protected
-        def make_row(header, index, record)
-          FlatFiles::RecordTuple.new(record, header, [ index ] + record.class.fields.collect { |f| record[f.name].value })
+        def make_tuple(header, index, record)
+          FlatFiles::RecordTuple.new(header, [ index ] + record.class.fields.collect { |f| record[f.name].value }, record)
         end
       end
 
@@ -71,7 +74,7 @@ module FlatFiles
           fields = [[:index, Integer]]
           for field in klass.fields
             veritas_class = case field.prototype.obj_class.name
-              when "BinData::String", "FlatFiles::Records::BinData::PascalStringField" then String
+              when "BinData::String", "FlatFiles::RecordImpls::BinData::PascalStringField" then String
               when -> n { n.to_s =~ /int/ } then Integer
               else
                 raise "Unknown type: " + field.prototype.obj_class.to_s

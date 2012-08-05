@@ -104,7 +104,7 @@ case command
       records = []
       results.each do |record_string|
         if options.json
-          records << provider[type].parse(record_string).normalize_pascal_strings.to_hash(true)
+          records << provider[type].parse(record_string).to_hash(true)
         else
           records << record_string
         end
@@ -125,19 +125,26 @@ case command
     puts "Generating #{num_employees} employees into #{employee_file}"
 
     # generate some companies. contactids are all 0
-    companies = FlatFiles::Records.new(provider).generate(:company, num_companies).map { |rec| provider[:company].parse(rec) }
+    companies = FlatFiles::Records.new(provider).generate(:company, num_companies).map { |rec| provider[:company].read(rec) }
     # generate some employees. companyids are all o
-    employees = FlatFiles::Records.new(provider).generate(:employee, num_employees).map { |rec| provider[:employee].parse(rec) }
+    employees = FlatFiles::Records.new(provider).generate(:employee, num_employees).map { |rec| provider[:employee].read(rec) }
 
     # set random company for all employees
-    company_employees = {}
+    employee_indexes = (0...employees.length).to_a.shuffle
+    company_indexes = (0...companies.length).to_a.shuffle
+    employees_company = []
+    employee_indexes.each_with_index do |index, i|
+      company_index = (i * (company_indexes.length.to_f / employee_indexes.length.to_f)).to_i
+      employees_company[index] = company_index
+    end
+
+    company_employees = []
     File.open(employee_file, "w") do |file|
       employees.each_with_index do |rec, i|
-        idx = rand(companies.length)
-        rec.companyid = idx
-
+        company_idx = employees_company[i] || -1
+        rec.companyid = company_idx
         # add the employee index to company list
-        e = (company_employees[idx] ||= [])
+        e = (company_employees[company_idx] ||= [])
         e << i
 
         # write out employee
@@ -150,7 +157,14 @@ case command
       companies.each_with_index do |rec, i|
         e = company_employees[i]
         rec.contactid = e.sample
-        file.write(rec.pack)
+        begin
+          file.write(rec.pack)
+        rescue Exception => exc
+          p "Error writing record"
+          p exc 
+          p rec
+          print_records([rec], true, true) 
+        end
       end
     end
 

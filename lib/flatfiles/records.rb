@@ -13,7 +13,7 @@ module FlatFiles
       struct_class = record_class(type.to_sym)
       records = []
       num.times do
-        records << FactoryGirl.build(type).to_binary_s
+        records << FactoryGirl.build(type, impl_class: struct_class).pack
       end
       records
     end

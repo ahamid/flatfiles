@@ -11,24 +11,27 @@ module FlatFiles
     end
 
     def records(limit = nil)
-      Enumerator.new { |y|
-        index = 0
-        File.open(@file) do |file|
-          loop {
-            begin
-              rec = @record_class.read(file)
-              index += 1
-              if rec
-                rec[:index] = index
-                y << rec
-                break if limit and index >= limit
-              end
-            rescue EOFError
-              raise StopIteration
-            end
-          }
-        end
-      }
+      File.open(@file) do |file|
+        @record_class.relation(file).to_a
+      end
+      #Enumerator.new { |y|
+      #  index = 0
+      #  File.open(@file) do |file|
+      #    loop {
+      #      begin
+      #        rec = @record_class.read(file)
+      #        index += 1
+      #        if rec
+      #          rec[:index] = index
+      #          y << rec
+      #          break if limit and index >= limit
+      #        end
+      #      rescue EOFError
+      #        raise StopIteration
+      #      end
+      #    }
+      #  end
+      #}
       #if records.length != num_records
       #  raise "Expected #{num_records} records but only parsed #{records.length}"
       #end
