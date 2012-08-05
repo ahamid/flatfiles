@@ -1,0 +1,26 @@
+require_relative 'dsl-common'
+
+module FlatFiles
+  module Spec
+    module DSL
+      class CompanyStaticHash < FlatFiles::RecordImpls::DSL::StructRecord
+        #record_size 415
+        record_type FlatFiles::RecordImpls::StaticHashFactory
+        include CompanyFields
+      end
+
+      class EmployeeStaticHash < FlatFiles::RecordImpls::DSL::StructRecord
+        #record_size 359
+        record_type FlatFiles::RecordImpls::StaticHashFactory
+        include EmployeeFields
+      end
+
+      STATICHASH_PROVIDER = {
+        :company => CompanyStaticHash,
+        :employee => EmployeeStaticHash
+      }
+
+      FlatFiles::ProviderRegistry.register(:dsl_statichash, STATICHASH_PROVIDER)
+    end
+  end
+end
