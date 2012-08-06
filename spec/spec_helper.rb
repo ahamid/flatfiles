@@ -12,7 +12,7 @@ FactoryGirl.find_definitions
 
 ONE_EMPLOYEE = File.expand_path("./test-data/1-employee.dat", File.dirname(__FILE__))
 ONE_COMPANY = File.expand_path("./test-data/1-company.dat", File.dirname(__FILE__))
-FORTYK_EMPLOYEE = File.expand_path("./test-data/40000-employees.dat", File.dirname(__FILE__))
+FORTYK_EMPLOYEES = File.expand_path("./test-data/40000-employees.dat", File.dirname(__FILE__))
 TENK_COMPANIES = File.expand_path("./test-data/10000-companies.dat", File.dirname(__FILE__))
 
 OPEN_FILES = {}
@@ -24,7 +24,7 @@ def open_file(name)
     #OPEN_FILES[name] = file
     content = (OPEN_FILES[name] = File.read(name, mode: 'rb'))
   end
-  FlatFiles::Util::BytesResource.new(content)
+  FlatFiles::Util::BytesResource.new(name, content)
 end
 
 RSpec.configure do |c|

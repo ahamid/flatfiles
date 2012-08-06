@@ -7,6 +7,7 @@ module FlatFiles
         @mode = mode
       end
 
+      def id; raise NotImplementedError end
       def with(&block); raise NotImplementedError end
       def size; raise NotImplementedError end
     end
@@ -17,6 +18,8 @@ module FlatFiles
         @file = file
         super(mode)
       end
+
+      alias :file :id
 
       def with(&block)
         File.open(@file, @mode, &block)
@@ -29,7 +32,10 @@ module FlatFiles
 
     class BytesResource < IOResource
       attr_reader :content
-      def initialize(content, mode = 'r')
+      attr_reader :id
+
+      def initialize(id, content, mode = 'r')
+        @id = id
         @content = content
         super(mode)
       end

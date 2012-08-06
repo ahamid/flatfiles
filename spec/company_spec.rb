@@ -10,6 +10,7 @@ FlatFiles::ProviderRegistry.providers.values.each do |provider|
 
       {
         num_bytes: 425,
+        index: 10,
         active: 'y',
         name: 'Nikolaus and Sons',
         founded: 722375301,
@@ -29,6 +30,12 @@ FlatFiles::ProviderRegistry.providers.values.each do |provider|
       }.each do |field, value|
         its(field) { should == value }
         its("#{field.to_s}.length") { should == value.length } if value.is_a?(String)
+      end
+
+      it "is indexable" do
+        subject[:index] = 1
+        subject[:index].should == 1
+        subject.index.should == 1
       end
     end
     
