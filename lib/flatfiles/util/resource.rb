@@ -19,7 +19,7 @@ module FlatFiles
         super(mode)
       end
 
-      alias :file :id
+      alias :id :file
 
       def with(&block)
         File.open(@file, @mode, &block)

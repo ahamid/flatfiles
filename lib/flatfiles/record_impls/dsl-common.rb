@@ -1,7 +1,8 @@
 require 'veritas'
 require 'flatfiles/sizable'
 require 'flatfiles/record_file_enumerator'
-require 'flatfiles/record_tuple'
+require 'flatfiles/veritas/record_tuple'
+require 'flatfiles/veritas/tuple_provider'
 
 module FlatFiles
   module RecordImpls
@@ -138,27 +139,30 @@ module FlatFiles
         end
       end
 
-      class HashRecordFileEnumerator < FlatFiles::RecordFileEnumerator
-        def initialize(header, klass, io, field_names)
-          @field_names = field_names
-          super(header, klass, io)
-        end
-
-        protected
-
-        def make_tuple(header, index, record)
-          FlatFiles::RecordTuple.new(header, [ index ] + @field_names.map { |f| record[f] }, record)
-        end
-      end
-
-      # a Veritas relation implementation that derives attributes from Fields
+      # a Veritas tuple provider implementation that derives attributes from Fields
       # and values from Hash lookups
-      class HashRelation < Veritas::Relation
-        def initialize(klass, fields, io)
-          field_names = fields.reject { |f| f.name =~ INTERNAL_FIELD_REGEX }.map { |f| f.name }
-          attributes = fields.reject { |k,v| k.name =~ INTERNAL_FIELD_REGEX }.map { |f| [ f.name, f.type ] }
-          header = Veritas::Relation::Header.new([ [:index, Integer] ] + attributes)
-          super(header, HashRecordFileEnumerator.new(header, klass, io, field_names))
+      class HashRecordTupleProvider < FlatFiles::Veritas::TupleProvider
+        def initialize(record_class, fields)
+          @record_class = record_class
+          @field_names = fields.reject { |f| f.name =~ INTERNAL_FIELD_REGEX }.map { |f| f.name }
+          @attributes = fields.reject { |k,v| k.name =~ INTERNAL_FIELD_REGEX }.map { |f| [ f.name, f.type ] }
+          @header = ::Veritas::Relation::Header.new([ [:index, Integer] ] + @attributes)
+        end
+
+        def id
+          @record_class.name
+        end
+
+        def make_header
+          @header
+        end
+
+        def read_record(index, header, io, context)
+          @record_class.read(io)
+        end
+
+        def make_tuple(index, header, record)
+          FlatFiles::Veritas::RecordTuple.new(header, [ index ] + @field_names.map { |f| record[f] }, record)
         end
       end
 
@@ -211,7 +215,7 @@ module FlatFiles
 
           def relation(io)
             init_class
-            HashRelation.new(self, field_components, io)
+            FlatFiles::Veritas::TupleProviderRelation.new(HashRecordTupleProvider.new(self, @field_components), io)
           end
 
           def field_names
