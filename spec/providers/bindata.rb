@@ -51,11 +51,11 @@ module FlatFiles
       end
 
       PROVIDER = {
-        :company => Company,
-        :employee => Employee
+        :company => FlatFiles::RecordImpls::BinData::BinDataTupleProvider.new(Company),
+        :employee => FlatFiles::RecordImpls::BinData::BinDataTupleProvider.new(Employee)
       }
 
-      FlatFiles::ProviderRegistry.register(:bindata, PROVIDER)
+      #FlatFiles::ProviderRegistry.register(:bindata, PROVIDER)
     end
   end
 end

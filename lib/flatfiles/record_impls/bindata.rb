@@ -57,10 +57,6 @@ module FlatFiles
 
         alias :parse :read
         alias :pack :to_binary_s
-
-        def self.relation(io)
-          FlatFiles::Veritas::TupleProviderRelation.new(BinDataTupleProvider.new(self), io)
-        end
       end
 
       class BinDataTupleProvider < FlatFiles::Veritas::TupleProvider
@@ -73,23 +69,31 @@ module FlatFiles
           @record_class.name
         end
 
+        def record_size
+          @record_class.size
+        end
+
         def init_read_context
           @record_class.new
         end
 
-        def make_header
+        def header
           @header
         end
 
-        def read_record(index, header, io, record_template)
+        def read_record(index, io, record_template)
           record_template.clear
           record_template.read(io)
         end
 
-        def make_tuple(index, header, record)
+        def make_tuple(index, record)
           #values = [ index ] + record.class.fields.collect { |f| record[f.name].value }
           values = [ index ] + record.field_objs.collect { |f| f.value }
           FlatFiles::Veritas::RecordTuple.new(header, values, record)
+        end
+
+        def relation(resource)
+          FlatFiles::Veritas::TupleProviderRelation.new(BinDataTupleProvider.new(@record_class), resource)
         end
 
         protected

@@ -16,8 +16,8 @@ module FlatFiles
       end
 
       STATICHASH_PROVIDER = {
-        :company => CompanyStaticHash,
-        :employee => EmployeeStaticHash
+        :company => FlatFiles::RecordImpls::DSL::HashRecordTupleProvider.new(CompanyStaticHash),
+        :employee => FlatFiles::RecordImpls::DSL::HashRecordTupleProvider.new(EmployeeStaticHash)
       }
 
       FlatFiles::ProviderRegistry.register(:dsl_statichash, STATICHASH_PROVIDER)

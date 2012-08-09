@@ -16,8 +16,8 @@ module FlatFiles
       end
 
       LWSTRUCT_PROVIDER = {
-        :company => CompanyLightweightStruct,
-        :employee => EmployeeLightweightStruct
+        :company => FlatFiles::RecordImpls::DSL::HashRecordTupleProvider.new(CompanyLightweightStruct),
+        :employee => FlatFiles::RecordImpls::DSL::HashRecordTupleProvider.new(EmployeeLightweightStruct)
       }
 
       FlatFiles::ProviderRegistry.register(:dsl_lwstruct, LWSTRUCT_PROVIDER)

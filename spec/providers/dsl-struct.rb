@@ -16,8 +16,8 @@ module FlatFiles
       end
 
       STRUCT_PROVIDER = {
-        :company => CompanyStruct,
-        :employee => EmployeeStruct
+        :company => FlatFiles::RecordImpls::DSL::HashRecordTupleProvider.new(CompanyStruct),
+        :employee => FlatFiles::RecordImpls::DSL::HashRecordTupleProvider.new(EmployeeStruct)
       }
 
       FlatFiles::ProviderRegistry.register(:dsl_struct, STRUCT_PROVIDER)

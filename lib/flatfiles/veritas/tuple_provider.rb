@@ -8,27 +8,35 @@ module FlatFiles
         raise NotImplementedError
       end
 
+      def record_size
+        raise NotImplementedError
+      end
+
       def init_read_context
         nil
       end
 
-      def read_record(index, header, io, context)
+      def read_record(index, io, context)
         raise NotImplementedError
       end
 
-      def make_header
+      def header
         raise NotImplementedError
       end
 
-      def make_tuple(index, header, record)
+      def make_tuple(index, record)
+        raise NotImplementedError
+      end
+
+      def relation(resource)
         raise NotImplementedError
       end
     end
 
     class TupleProviderRelation < ::Veritas::Relation
-      def initialize(tuple_provider, io)
-        header = tuple_provider.make_header
-        super(header, RecordFileEnumerator.new(header, tuple_provider, io))
+      def initialize(tuple_provider, resource)
+        header = tuple_provider.header
+        super(header, RecordFileEnumerator.new(tuple_provider, resource))
       end
     end
   end

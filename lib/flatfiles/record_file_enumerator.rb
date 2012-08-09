@@ -3,7 +3,7 @@ module FlatFiles
     @@tuple_cache = {}
 
     attr_reader :reading
-    def initialize(header, tuple_provider, resource, index_start = 0)
+    def initialize(tuple_provider, resource, index_start = 0)
       @tuple_provider = tuple_provider
       @tuple_cache_id = tuple_provider.id + "/" + resource.id
       @cache = @@tuple_cache[@tuple_cache_id]
@@ -24,7 +24,7 @@ module FlatFiles
             tuple = @cache[offset]
             if tuple.nil?
               if @reading
-                tuple = (@cache[offset] ||= read_tuple(index, header, io, context))
+                tuple = (@cache[offset] ||= read_tuple(index, io, context))
               else
                 raise StopIteration
               end
@@ -38,9 +38,9 @@ module FlatFiles
 
     protected
 
-    def read_tuple(index, header, io, context)
+    def read_tuple(index, io, context)
       record = begin
-        @tuple_provider.read_record(index, header, io, context)
+        @tuple_provider.read_record(index, io, context)
       rescue EOFError
         # catch EOFError
       end
@@ -49,7 +49,7 @@ module FlatFiles
         @@tuple_cache[@tuple_cache_id] = @cache
         raise StopIteration
       end
-      @tuple_provider.make_tuple(index, header, record)
+      @tuple_provider.make_tuple(index, record)
     end
   end
 end

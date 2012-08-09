@@ -1,17 +1,17 @@
 module FlatFiles
   class RecordFile
-    def initialize(resource, record_class)
+    def initialize(resource, tuple_provider)
       @resource = resource
-      @record_class = record_class
+      @tuple_provider = tuple_provider
       @file_size = @resource.size
-      if @file_size % @record_class.size != 0
+      if @file_size % @tuple_provider.record_size != 0
         raise "File size is not a whole multiple of record size"
       end
-      @num_records = @file_size / @record_class.size
+      @num_records = @file_size / @tuple_provider.record_size
     end
 
     def relation
-      @record_class.relation(@resource)
+      @tuple_provider.relation(@resource)
     end
 
     def records(limit = nil)
@@ -73,8 +73,8 @@ module FlatFiles
 
     def record_at_index(io, index)
       idx = index
-      io.pos = idx * @record_class.size
-      rec = @record_class.read(io)
+      io.pos = idx * @tuple_provider.record_size
+      rec = @tuple_provider.read_record(index, io, @tuple_provider.init_read_context)
       rec[:index] = index
       return rec
     end
