@@ -285,28 +285,8 @@ module FlatFiles
 
       # a Veritas tuple provider implementation that derives attributes from Fields
       # and values from Hash lookups
-      class HashRecordTupleProvider < FlatFiles::Veritas::TupleProvider
-        def initialize(record_class)
-          @record_class = record_class
-          fields = @record_class.field_components
-          @field_names = fields.reject { |f| f.name =~ INTERNAL_FIELD_REGEX }.map { |f| f.name }
-          @attributes = fields.reject { |k,v| k.name =~ INTERNAL_FIELD_REGEX }.map { |f| [ f.name, f.type ] }
-          @header = ::Veritas::Relation::Header.new([ [:index, Integer] ] + @attributes)
-        end
-
-        def id
-          @record_class.name
-        end
-
-        def record_size
-          @record_class.size
-        end
-
-        def header
-          @header
-        end
-
-        def read_record(index, io, context)
+      class HashRecordTupleProvider < FlatFiles::Veritas::BaseTupleProvider
+        def read_record(index, io, context = nil)
           @record_class.read(io)
         end
 
@@ -318,6 +298,14 @@ module FlatFiles
           FlatFiles::Veritas::TupleProviderRelation.new(HashRecordTupleProvider.new(@record_class), resource)
         end
 
+        protected
+
+        def generate_header
+          fields = record_class.field_components
+          @field_names = fields.reject { |f| f.name =~ INTERNAL_FIELD_REGEX }.map { |f| f.name }
+          @attributes = fields.reject { |k,v| k.name =~ INTERNAL_FIELD_REGEX }.map { |f| [ f.name, f.type ] }
+          ::Veritas::Relation::Header.new([ [:index, Integer] ] + @attributes)
+        end
       end
 
     end

@@ -21,7 +21,7 @@ FactoryGirl.define do
     state     { Faker::Address.us_state_abbr }
     zipcode   { Faker::Address.zip_code }
     areacode  { Faker::Base.numerify('###') }
-    phone     { Faker::Base.numerify('###-###-###') }
+    phone     { Faker::Base.numerify('###-###-####') }
     note      { Faker::Lorem.words(15).join(' ') }
     unknown1  'Y' * 13
   end
@@ -38,8 +38,8 @@ FactoryGirl.define do
     state        { Faker::Address.us_state }
     zipcode      { Faker::Address.zip_code }
     areacode     { Faker::Base.numerify('###') }
-    home_phone   { Faker::Base.numerify('###-###-###') }
-    mobile_phone { Faker::Base.numerify('###-###-###') }
+    home_phone   { Faker::Base.numerify('###-###-####') }
+    mobile_phone { Faker::Base.numerify('###-###-####') }
     note         { Faker::Lorem.words(15).join(' ') }
     salary       { Random.rand(1000..100000) }
     companyid    0

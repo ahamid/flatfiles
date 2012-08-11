@@ -7,7 +7,7 @@ module FlatFiles
       module CompanyFields
         def self.included(base)
           base.class_eval do
-            record_size 425
+            record_size 426
 
             field         'a',     :active,    'y'
             pascal_string 'ca50',  :name,      Faker::Company.method(:name)
@@ -22,7 +22,7 @@ module FlatFiles
             pascal_string 'ca2',   :state,     Faker::Address.method(:us_state_abbr)
             pascal_string 'ca10',  :zipcode,   Faker::Address.method(:zip_code)
             pascal_string 'ca3',   :areacode,  lambda { Faker::Base.numerify('###') }
-            pascal_string 'ca11',  :phone,     lambda { Faker::Base.numerify('###-###-###') }
+            pascal_string 'ca12',  :phone,     lambda { Faker::Base.numerify('###-###-####') }
             pascal_string 'ca100', :note,      lambda { Faker::Lorem.words(15).join(' ') }
             field         'a13',   nil,        'X' * 13
           end
@@ -32,7 +32,7 @@ module FlatFiles
       module EmployeeFields
         def self.included(base)
           base.class_eval do
-            record_size 369
+            record_size 371
 
             field         'a',     :active,       'y'
             pascal_string 'ca10',  :honorific,    Faker::Name.method(:prefix)
@@ -45,8 +45,8 @@ module FlatFiles
             pascal_string 'ca2',   :state,        Faker::Address.method(:us_state_abbr)
             pascal_string 'ca10',  :zipcode,      Faker::Address.method(:zip_code)
             pascal_string 'ca3',   :areacode,     lambda { Faker::Base.numerify('###') }
-            pascal_string 'ca11',  :home_phone,   lambda { Faker::Base.numerify('###-###-###') }
-            pascal_string 'ca11',  :mobile_phone, lambda { Faker::Base.numerify('###-###-###') }
+            pascal_string 'ca12',  :home_phone,   lambda { Faker::Base.numerify('###-###-####') }
+            pascal_string 'ca12',  :mobile_phone, lambda { Faker::Base.numerify('###-###-####') }
             pascal_string 'ca100', :note,         lambda { Faker::Lorem.words(15).join(' ') }
             integer       'N',     :salary,       lambda { Random.rand(1000..100000) }
             integer       'v',     :companyid,    0

@@ -59,29 +59,13 @@ module FlatFiles
         alias :pack :to_binary_s
       end
 
-      class BinDataTupleProvider < FlatFiles::Veritas::TupleProvider
-        def initialize(record_class)
-          @record_class = record_class
-          @header = generate_header
-        end
-
-        def id
-          @record_class.name
-        end
-
-        def record_size
-          @record_class.size
-        end
+      class BinDataTupleProvider < FlatFiles::Veritas::BaseTupleProvider
 
         def init_read_context
           @record_class.new
         end
 
-        def header
-          @header
-        end
-
-        def read_record(index, io, record_template)
+        def read_record(index, io, record_template = init_read_context)
           record_template.clear
           record_template.read(io)
         end

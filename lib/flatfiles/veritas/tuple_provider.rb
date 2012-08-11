@@ -8,15 +8,19 @@ module FlatFiles
         raise NotImplementedError
       end
 
+      def record_class
+        raise NotImplementedError
+      end
+
       def record_size
         raise NotImplementedError
       end
 
       def init_read_context
-        nil
+        raise NotImplementedError
       end
 
-      def read_record(index, io, context)
+      def read_record(index, io, context = init_read_context)
         raise NotImplementedError
       end
 
@@ -29,6 +33,34 @@ module FlatFiles
       end
 
       def relation(resource)
+        raise NotImplementedError
+      end
+    end
+
+    class BaseTupleProvider < TupleProvider
+      attr_reader :record_class
+      attr_reader :header
+
+      def initialize(record_class)
+        @record_class = record_class
+        @header = generate_header
+      end
+
+      def id
+        record_class.name
+      end
+
+      def record_size
+        record_class.size
+      end
+
+      def init_read_context
+        nil
+      end
+
+      protected
+
+      def generate_header
         raise NotImplementedError
       end
     end

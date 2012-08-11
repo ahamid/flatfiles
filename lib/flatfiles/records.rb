@@ -27,11 +27,11 @@ module FlatFiles
     end
 
     def record_class(record_type)
-      @provider[record_type.to_sym]
+      @provider[record_type.to_sym].record_class
     end
 
-    def record_file(resource, type)
-      RecordFile.new(resource, record_class(type))
+    def record_file(resource, record_type)
+      RecordFile.new(resource, @provider[record_type.to_sym])
     end
 
   end

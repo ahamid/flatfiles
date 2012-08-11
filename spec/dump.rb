@@ -125,9 +125,9 @@ case command
     puts "Generating #{num_employees} employees into #{employee_file}"
 
     # generate some companies. contactids are all 0
-    companies = FlatFiles::Records.new(provider).generate(:company, num_companies).map { |rec| provider[:company].read(rec) }
-    # generate some employees. companyids are all o
-    employees = FlatFiles::Records.new(provider).generate(:employee, num_employees).map { |rec| provider[:employee].read(rec) }
+    companies = FlatFiles::Records.new(provider).generate(:company, num_companies).each_with_index.map { |rec, i| provider[:company].read_record(i, rec) }
+    # generate some employees. companyids are all 0
+    employees = FlatFiles::Records.new(provider).generate(:employee, num_employees).each_with_index.map { |rec, i| provider[:employee].read_record(i, rec) }
 
     # set random company for all employees
     employee_indexes = (0...employees.length).to_a.shuffle
