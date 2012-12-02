@@ -36,6 +36,10 @@ module FlatFiles
       end
     end
 
+    def self.reset_tuple_cache
+      @@tuple_cache.clear
+    end
+
     protected
 
     def read_tuple(index, io, context)

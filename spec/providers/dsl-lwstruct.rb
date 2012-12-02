@@ -4,13 +4,11 @@ module FlatFiles
   module Spec
     module DSL
       class CompanyLightweightStruct < FlatFiles::RecordImpls::DSL::StructRecord
-        #record_size 415
         record_type FlatFiles::RecordImpls::LightweightStructFactory
         include CompanyFields
       end
 
       class EmployeeLightweightStruct < FlatFiles::RecordImpls::DSL::StructRecord
-        #record_size 359
         record_type FlatFiles::RecordImpls::LightweightStructFactory
         include EmployeeFields
       end

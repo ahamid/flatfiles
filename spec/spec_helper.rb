@@ -22,7 +22,11 @@ def open_file(name)
   if content.nil?
     #file = File.open(name)
     #OPEN_FILES[name] = file
-    content = (OPEN_FILES[name] = File.read(name, mode: 'rb'))
+
+    #time = Benchmark.realtime do
+      content = (OPEN_FILES[name] = File.read(name, File.size(name), mode: 'rb')).freeze
+    #end
+    #puts "Time to read file #{File.basename(name)}: #{time*1000} milliseconds"
   end
   FlatFiles::Util::BytesResource.new(name, content)
 end

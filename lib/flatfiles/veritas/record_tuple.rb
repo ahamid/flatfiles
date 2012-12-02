@@ -39,3 +39,9 @@ end
 class Veritas::Tuple
   include FlatFiles::Veritas::RecordTupleMixin
 end
+
+class Veritas::Relation
+  # hack tuples to be public so we can explicitly
+  # read N values at a time
+  public :tuples
+end

@@ -19,7 +19,7 @@ module FlatFiles
             field         'a10',   nil,        'X' * 10
             pascal_string 'ca50',  :street,    Faker::Address.method(:street_name)
             pascal_string 'ca30',  :city,      Faker::Address.method(:city)
-            pascal_string 'ca2',   :state,     Faker::Address.method(:us_state_abbr)
+            pascal_string 'ca2',   :state,     Faker::Address.method(:state_abbr)
             pascal_string 'ca10',  :zipcode,   Faker::Address.method(:zip_code)
             pascal_string 'ca3',   :areacode,  lambda { Faker::Base.numerify('###') }
             pascal_string 'ca12',  :phone,     lambda { Faker::Base.numerify('###-###-####') }
@@ -42,7 +42,7 @@ module FlatFiles
             field         'a10',   nil,           'X' * 10
             pascal_string 'ca50',  :street,       Faker::Address.method(:street_name)
             pascal_string 'ca30',  :city,         Faker::Address.method(:city)
-            pascal_string 'ca2',   :state,        Faker::Address.method(:us_state_abbr)
+            pascal_string 'ca2',   :state,        Faker::Address.method(:state_abbr)
             pascal_string 'ca10',  :zipcode,      Faker::Address.method(:zip_code)
             pascal_string 'ca3',   :areacode,     lambda { Faker::Base.numerify('###') }
             pascal_string 'ca12',  :home_phone,   lambda { Faker::Base.numerify('###-###-####') }

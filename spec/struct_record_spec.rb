@@ -20,7 +20,7 @@ describe 'StructRecord' do
     end
   end
 
-  its(:size) { should eq(369) }
+  its(:size) { should eq(371) }
   its(:type) { should eq(record_factory) }
   its(:field_names) { should =~ field_names }
 

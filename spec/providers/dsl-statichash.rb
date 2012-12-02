@@ -4,13 +4,11 @@ module FlatFiles
   module Spec
     module DSL
       class CompanyStaticHash < FlatFiles::RecordImpls::DSL::StructRecord
-        #record_size 415
         record_type FlatFiles::RecordImpls::StaticHashFactory
         include CompanyFields
       end
 
       class EmployeeStaticHash < FlatFiles::RecordImpls::DSL::StructRecord
-        #record_size 359
         record_type FlatFiles::RecordImpls::StaticHashFactory
         include EmployeeFields
       end

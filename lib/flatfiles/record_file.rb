@@ -16,7 +16,11 @@ module FlatFiles
 
     def records(limit = nil)
       #relation.sort_by { |r| r.index }.take(limit).to_a
-      relation.to_a
+      if limit
+        relation.tuples.first(limit) #.to_a
+      else
+        relation.to_a
+      end
       #File.open(@file) do |file|
       #  @record_class.relation(file).to_a
       #end
@@ -76,7 +80,7 @@ module FlatFiles
       io.pos = idx * @tuple_provider.record_size
       rec = @tuple_provider.read_record(index, io, @tuple_provider.init_read_context)
       rec[:index] = index
-      return rec
+      rec
     end
 
     def self.parse_quoted_query(str)
