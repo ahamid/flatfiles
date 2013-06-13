@@ -64,7 +64,7 @@ FlatFiles::ProviderRegistry.providers.values.each do |provider|
           results = subject.restrict { |rel| rel[:companyid].eq(9806) }
           results.count.should == 4
         end
-        p "Employee companyid search time for #{provider[:employee].record_class} " + @elapsed.to_s
+        puts "Employee companyid search time for #{provider[:employee].record_class} " + @elapsed.to_s
         results.each do |r|
           r[:companyid].should == 9806
         end
@@ -76,7 +76,7 @@ FlatFiles::ProviderRegistry.providers.values.each do |provider|
           results = subject.restrict { |rel| rel[:firstname].match(/Christine/) }
           results.count.should == 17
         end
-        p "Employee first name search time for #{provider[:employee].record_class} " + @elapsed.to_s
+        puts "Employee first name search time for #{provider[:employee].record_class} " + @elapsed.to_s
         results.each do |r|
           r[:firstname].should =~ /Christine/
         end

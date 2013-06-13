@@ -25,7 +25,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency("bundler")
   s.add_development_dependency("rake")
   s.add_development_dependency("rspec", [">= 0"])
-  s.add_development_dependency("simplecov", [">= 0"])
   s.add_development_dependency("rdoc", [">= 0"])
   s.add_development_dependency("simplecov")
   s.add_development_dependency("turn")

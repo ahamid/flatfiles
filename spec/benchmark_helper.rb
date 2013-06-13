@@ -50,7 +50,7 @@ module BenchmarkHelpers
     end
 
     def benchmark_profile(description, options, &block)
-      options = { label_width: 50 }.merge(options)
+      options = { label_width: 50, perf: true }.merge(options)
       proc = block
       if options[:benchmark]
         proc = Proc.new { BenchmarkHelpers.benchmark_example(example, options, &block) }
