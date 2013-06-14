@@ -15,17 +15,17 @@ describe "Enumerator-based Relation" do
     end
   end
 
-  let(:a) { Veritas::Relation.new([[:index, Integer], [:name, String]], ArrayEnumerator.new([ "larry", "curly", "moe" ])) }
-  let(:b) { Veritas::Relation.new([[:index, Integer], [:name, String]], ArrayEnumerator.new([ "red", "green", "blue" ])) }
+  let(:a) { Axiom::Relation.new([[:index, Integer], [:name, String]], ArrayEnumerator.new([ "larry", "curly", "moe" ])) }
+  let(:b) { Axiom::Relation.new([[:index, Integer], [:name, String]], ArrayEnumerator.new([ "red", "green", "blue" ])) }
 
   describe "relation a" do
     subject { a }
     its(:count) { should == 3 }
     it "should produce 3 tuples" do
       subject.to_a.should =~ [
-        Veritas::Tuple.coerce(subject.header, [0, "larry"]),
-        Veritas::Tuple.coerce(subject.header, [1, "curly"]),
-        Veritas::Tuple.coerce(subject.header, [2, "moe"]),
+        Axiom::Tuple.coerce(subject.header, [0, "larry"]),
+        Axiom::Tuple.coerce(subject.header, [1, "curly"]),
+        Axiom::Tuple.coerce(subject.header, [2, "moe"]),
       ]
     end
   end
@@ -35,9 +35,9 @@ describe "Enumerator-based Relation" do
     its(:count) { should == 3 }
     it "should produce 3 tuples" do
       subject.to_a.should =~ [
-        Veritas::Tuple.coerce(subject.header, [0, "red"]),
-        Veritas::Tuple.coerce(subject.header, [1, "green"]),
-        Veritas::Tuple.coerce(subject.header, [2, "blue"]),
+        Axiom::Tuple.coerce(subject.header, [0, "red"]),
+        Axiom::Tuple.coerce(subject.header, [1, "green"]),
+        Axiom::Tuple.coerce(subject.header, [2, "blue"]),
       ]
     end
   end
@@ -47,7 +47,7 @@ describe "Enumerator-based Relation" do
     its(:count) { should == 1}
     it "should produce one tuple" do
       subject.to_a.should =~ [
-        Veritas::Tuple.coerce(subject.header, [1, "curly"])
+        Axiom::Tuple.coerce(subject.header, [1, "curly"])
       ]
     end
     it "tuples should be index 1" do
@@ -66,7 +66,7 @@ describe "Enumerator-based Relation" do
     its(:count) { should == 1}
     it "should produce one tuple" do
       subject.to_a.should =~ [
-        Veritas::Tuple.coerce(restricted.header | joinee.header, [1, "curly", "green"])
+        Axiom::Tuple.coerce(restricted.header | joinee.header, [1, "curly", "green"])
       ]
     end
   end

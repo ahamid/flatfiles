@@ -1,8 +1,8 @@
-require 'veritas'
+require 'axiom'
 require 'flatfiles/record_file_enumerator'
 
 module FlatFiles
-  module Veritas
+  module Axiom
     class TupleProvider
       def id
         raise NotImplementedError
@@ -65,7 +65,7 @@ module FlatFiles
       end
     end
 
-    class TupleProviderRelation < ::Veritas::Relation
+    class TupleProviderRelation < ::Axiom::Relation
       def initialize(tuple_provider, resource)
         header = tuple_provider.header
         super(header, RecordFileEnumerator.new(tuple_provider, resource))

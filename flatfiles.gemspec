@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("json_pure", [">= 0"])
   s.add_runtime_dependency("i18n", [">= 0"])
   s.add_runtime_dependency("bindata", [">= 0"])
-  s.add_runtime_dependency("veritas", [">= 0"])
+  s.add_runtime_dependency("axiom", [">= 0"])
   s.add_runtime_dependency("factory_girl", [">= 0"])
   s.add_runtime_dependency("faker", [">= 0"])
   s.add_development_dependency("bundler")

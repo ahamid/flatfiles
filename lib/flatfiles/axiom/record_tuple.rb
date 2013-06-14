@@ -1,9 +1,9 @@
-require 'veritas'
+require 'axiom'
 
 module FlatFiles
-  module Veritas
+  module Axiom
     # re-open class to add optional record field
-    # we need to use Veritas::Tuple class
+    # we need to use Axiom::Tuple class
     # as class is considered when testing equality
     module RecordTupleMixin
     #  def initialize(header, values, record = nil)
@@ -26,21 +26,21 @@ module FlatFiles
       end
     end
 
-    class RecordTuple < ::Veritas::Tuple
+    class RecordTuple < ::Axiom::Tuple
       def self.new(header, values, record = nil)
         #@record = record
         #super(header, values)
-        ::Veritas::Tuple.new(header, values, record)
+        ::Axiom::Tuple.new(header, values, record)
       end
     end
   end
 end
 
-class Veritas::Tuple
-  include FlatFiles::Veritas::RecordTupleMixin
+class Axiom::Tuple
+  include FlatFiles::Axiom::RecordTupleMixin
 end
 
-class Veritas::Relation
+class Axiom::Relation
   # hack tuples to be public so we can explicitly
   # read N values at a time
   public :tuples

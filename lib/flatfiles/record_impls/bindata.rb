@@ -1,9 +1,9 @@
 require 'bindata'
-require 'veritas'
+require 'axiom'
 require 'flatfiles/sizable'
 require 'flatfiles/record_file_enumerator'
-require 'flatfiles/veritas/record_tuple'
-require 'flatfiles/veritas/tuple_provider'
+require 'flatfiles/axiom/record_tuple'
+require 'flatfiles/axiom/tuple_provider'
 
 module BinData
   SanitizedPrototype.class_eval do
@@ -35,7 +35,7 @@ module FlatFiles
         def set(v) self.data = v; end
       end
 
-      class VeritasRecord < ::BinData::Record
+      class AxiomRecord < ::BinData::Record
         extend FlatFiles::Sizable
 
         def to_hash(*args)
@@ -59,7 +59,7 @@ module FlatFiles
         alias :pack :to_binary_s
       end
 
-      class BinDataTupleProvider < FlatFiles::Veritas::BaseTupleProvider
+      class BinDataTupleProvider < FlatFiles::Axiom::BaseTupleProvider
 
         def init_read_context
           @record_class.new
@@ -73,11 +73,11 @@ module FlatFiles
         def make_tuple(index, record)
           #values = [ index ] + record.class.fields.collect { |f| record[f.name].value }
           values = [ index ] + record.field_objs.collect { |f| f.value }
-          FlatFiles::Veritas::RecordTuple.new(header, values, record)
+          FlatFiles::Axiom::RecordTuple.new(header, values, record)
         end
 
         def relation(resource)
-          FlatFiles::Veritas::TupleProviderRelation.new(BinDataTupleProvider.new(@record_class), resource)
+          FlatFiles::Axiom::TupleProviderRelation.new(BinDataTupleProvider.new(@record_class), resource)
         end
 
         protected
@@ -85,15 +85,15 @@ module FlatFiles
         def generate_header
           fields = [[:index, Integer]]
           for field in @record_class.fields
-            veritas_class = case field.prototype.obj_class.name
+            axiom_class = case field.prototype.obj_class.name
               when "BinData::String", "FlatFiles::RecordImpls::BinData::PascalStringField" then String
               when -> n { n.to_s =~ /int/ } then Integer
               else
                 raise "Unknown type: " + field.prototype.obj_class.to_s
             end
-            fields << [ field.name_as_sym, veritas_class ]
+            fields << [ field.name_as_sym, axiom_class ]
           end
-          ::Veritas::Relation::Header.new(fields)
+          ::Axiom::Relation::Header.new(fields)
         end
       end
     end

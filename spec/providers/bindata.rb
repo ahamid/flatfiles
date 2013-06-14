@@ -3,7 +3,7 @@ require 'flatfiles'
 module FlatFiles
   module Spec
     module BinData
-      class Company < FlatFiles::RecordImpls::BinData::VeritasRecord
+      class Company < FlatFiles::RecordImpls::BinData::AxiomRecord
         record_size 426
 
         attr_accessor :index
@@ -26,7 +26,7 @@ module FlatFiles
         string              :unknown1, :length => 13
       end
 
-      class Employee < FlatFiles::RecordImpls::BinData::VeritasRecord
+      class Employee < FlatFiles::RecordImpls::BinData::AxiomRecord
         record_size 371
 
         attr_accessor :index

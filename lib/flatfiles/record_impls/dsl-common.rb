@@ -1,8 +1,8 @@
-require 'veritas'
+require 'axiom'
 require 'flatfiles/sizable'
 require 'flatfiles/record_file_enumerator'
-require 'flatfiles/veritas/record_tuple'
-require 'flatfiles/veritas/tuple_provider'
+require 'flatfiles/axiom/record_tuple'
+require 'flatfiles/axiom/tuple_provider'
 
 module FlatFiles
   module RecordImpls
@@ -283,19 +283,19 @@ module FlatFiles
       end
 
 
-      # a Veritas tuple provider implementation that derives attributes from Fields
+      # an Axiom tuple provider implementation that derives attributes from Fields
       # and values from Hash lookups
-      class HashRecordTupleProvider < FlatFiles::Veritas::BaseTupleProvider
+      class HashRecordTupleProvider < FlatFiles::Axiom::BaseTupleProvider
         def read_record(index, io, context = nil)
           @record_class.read(io)
         end
 
         def make_tuple(index, record)
-          FlatFiles::Veritas::RecordTuple.new(header, [ index ] + @field_names.map { |f| record[f] }, record)
+          FlatFiles::Axiom::RecordTuple.new(header, [ index ] + @field_names.map { |f| record[f] }, record)
         end
 
         def relation(resource)
-          FlatFiles::Veritas::TupleProviderRelation.new(HashRecordTupleProvider.new(@record_class), resource)
+          FlatFiles::Axiom::TupleProviderRelation.new(HashRecordTupleProvider.new(@record_class), resource)
         end
 
         protected
@@ -304,7 +304,7 @@ module FlatFiles
           fields = record_class.field_components
           @field_names = fields.reject { |f| f.name =~ INTERNAL_FIELD_REGEX }.map { |f| f.name }
           @attributes = fields.reject { |k,v| k.name =~ INTERNAL_FIELD_REGEX }.map { |f| [ f.name, f.type ] }
-          ::Veritas::Relation::Header.new([ [:index, Integer] ] + @attributes)
+          ::Axiom::Relation::Header.new([ [:index, Integer] ] + @attributes)
         end
       end
 

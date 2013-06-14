@@ -12,7 +12,7 @@ describe FlatFiles::RecordFileEnumerator do
   }
   let(:init_ctx) { double("initial context") }
   let(:tuple_provider) {
-    tp = FlatFiles::Veritas::TupleProvider.new
+    tp = FlatFiles::Axiom::TupleProvider.new
     tp.stub(:id) { 'TupleProviderId' }
     tp.stub(:init_read_context) { init_ctx }
     tp
