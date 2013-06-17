@@ -304,7 +304,7 @@ module FlatFiles
           fields = record_class.field_components
           @field_names = fields.reject { |f| f.name =~ INTERNAL_FIELD_REGEX }.map { |f| f.name }
           @attributes = fields.reject { |k,v| k.name =~ INTERNAL_FIELD_REGEX }.map { |f| [ f.name, f.type ] }
-          ::Axiom::Relation::Header.new([ [:index, Integer] ] + @attributes)
+          ::Axiom::Relation::Header.coerce([ [:index, Integer] ] + @attributes)
         end
       end
 

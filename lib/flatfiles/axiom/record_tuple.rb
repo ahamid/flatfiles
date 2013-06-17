@@ -30,15 +30,16 @@ module FlatFiles
       def self.new(header, values, record = nil)
         #@record = record
         #super(header, values)
-        ::Axiom::Tuple.new(header, values, record)
+        #::Axiom::Tuple.new(header, values, record)
+        ::Axiom::Tuple.new(header, values)
       end
     end
   end
 end
 
-class Axiom::Tuple
-  include FlatFiles::Axiom::RecordTupleMixin
-end
+#class Axiom::Tuple
+#  include FlatFiles::Axiom::RecordTupleMixin
+#end
 
 class Axiom::Relation
   # hack tuples to be public so we can explicitly

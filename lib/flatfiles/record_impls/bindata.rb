@@ -93,7 +93,7 @@ module FlatFiles
             end
             fields << [ field.name_as_sym, axiom_class ]
           end
-          ::Axiom::Relation::Header.new(fields)
+          ::Axiom::Relation::Header.coerce(fields)
         end
       end
     end

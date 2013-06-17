@@ -1,3 +1,14 @@
+GIT
+  remote: git://github.com/dkubb/axiom.git
+  revision: e775140e1c5551b51e87fa9b45b3f45c35071eef
+  specs:
+    axiom (0.1.1)
+      abstract_type (~> 0.0.5)
+      adamantium (~> 0.0.7)
+      backports (~> 3.3, >= 3.3.0)
+      descendants_tracker (~> 0.0.1)
+      equalizer (~> 0.0.5)
+
 PATH
   remote: .
   specs:
@@ -22,12 +33,6 @@ GEM
       ice_nine (~> 0.7.0)
     ansi (1.4.3)
     archive-tar-minitar (0.5.2)
-    axiom (0.1.0)
-      abstract_type (~> 0.0.5)
-      adamantium (~> 0.0.7)
-      backports (~> 3.1, >= 3.1.1)
-      descendants_tracker (~> 0.0.1)
-      equalizer (~> 0.0.5)
     backports (3.3.2)
     bindata (1.5.0)
     columnize (0.3.6)
@@ -46,7 +51,7 @@ GEM
     json_pure (1.8.0)
     linecache19 (0.5.12)
       ruby_core_source (>= 0.1.4)
-    multi_json (1.7.6)
+    multi_json (1.7.7)
     rake (10.0.4)
     rdoc (4.0.1)
       json (~> 1.4)
@@ -80,6 +85,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  axiom!
   bundler
   flatfiles!
   rake
