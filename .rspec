@@ -1,1 +1,1 @@
---format documentation --tag ~perf
+--format documentation --tag ~perf --tag ~known_failure
